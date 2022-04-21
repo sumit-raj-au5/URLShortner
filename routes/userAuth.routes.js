@@ -24,6 +24,6 @@ router.get('/password-reset/:urlString', (req,res)=>{
 });
 router.post('/password-reset/:urlString', resetPassword);
 
-router.get('/signout', signOut)
+// router.get('/signout', signOut)
 
 module.exports = router;

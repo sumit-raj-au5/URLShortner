@@ -44,6 +44,11 @@ nav li a{
   border-radius: 36px;
   background: #FEE996;
 }
+.logoutBtn{
+  border-radius: 36px;
+  background: #ea0606;
+  color:#fff;
+}
 form h2{
   font-size: 2.4em;
   font-weight: 900;
@@ -140,20 +145,18 @@ footer{
   color: #aaa;
 }
 
-.error{
+/* .error{
   display: block;
   background-color: red;
   color: white;
   width: fit-content;
   height: 50px;
   padding: 5px;
-  }
+  } */
   
   .success{
-  display: block;
-  background-color: lightblue;
-  color: black;
-  width: fit-content;
-  height: 50px;
-  padding: 5px;
+    color: #18c65b;
+    margin: 10px 2px;
+    font-size: 0.8em;
+    font-weight: bold;
   }

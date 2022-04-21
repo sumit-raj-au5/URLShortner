@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(()=>{
     if(localStorage.getItem('user')){
       setIsLoggedIn(true);
@@ -13,6 +14,11 @@ function Header() {
     }
   }, [localStorage.getItem('user')]);
 
+  function signOut(e){
+    e.preventDefault();
+    localStorage.clear();
+    navigate("../home", { replace: true });
+  }
   return (
     <nav>
     <NavLink to="/home">
@@ -21,9 +27,9 @@ function Header() {
 
     <ul>
     {isLoggedIn && (<><li>Welcome, {localStorage.getItem('user')}</li>
-      <NavLink className={(navData) => (navData.isActive ? "btn" : 'none')} to="http://localhost:3500/userauth/signout">
-      <li>Log out</li>
-      </NavLink></>)}
+      <button className='logoutBtn' onClick={signOut}>
+      <li className='logoutBtn'>Log out</li>
+      </button></>)}
       {!isLoggedIn && <><NavLink className={(navData) => (navData.isActive ? "btn" : 'none')} to="/signin">
       <li>Log in</li>
       </NavLink>

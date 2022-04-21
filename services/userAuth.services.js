@@ -27,23 +27,23 @@ const service = {
                     res.status(200).send({status:"Login Success", token:token, user:data.email});
                 }
                 else{
-                    res.status(401).send({status:"error", errors:"Wrong Email or Password"});
+                    res.status(401).send({status:"error", error:"Wrong Email or Password"});
                 }
             }
             else{
-                res.status(401).send({status:"Error", Error:"User doesn't exist"});
+                res.status(401).send({status:"error", error:"User doesn't exist"});
             }
         }
         catch(err){
             console.log(err);
-            res.status(500).send({status:"Error", Error:"Error signing in"});
+            res.status(500).send({status:"error", error:"Error signing in"});
         }
     },
 
     async signup(req,res){
         try{
             const data = await helper.getUser(req.body.email);
-            if(data)res.status(501).send({status:"Error", Error:"User Exist"});
+            if(data)res.status(409).send({status:"error", error:"User Exist"});
             else{
             let entered_password = req.body.password;
             const salt = await bcrypt.genSalt();
@@ -55,13 +55,13 @@ const service = {
                     res.status(200).send({status:"Signup Success"});  
             }
             else{
-                res.status(501).send({status:"Error", Error:"Error Signining Up"});
+                res.status(501).send({status:"error", error:"Error Signining Up"});
             }
         }
         }
         catch(err){
             console.log(err);
-            res.status(500).send({status:"Error", Error:"Error signing up"});
+            res.status(500).send({status:"error", error:"Error signing up"});
         }
     },
 
@@ -70,15 +70,16 @@ const service = {
             
             const data = await helper.verifyUser(req.params.string);
             console.log(data);
-            if (data.value == null) res.status(401).send({status:"Verification failed due to wrong link"});
+            if (data.value == null) res.status(401).send({status:"error", error:"Verification failed due to wrong link"});
             else {
-              res.status(200).send({status:"Success", "userVerified":true});
+              //res.status(200).send({status:"Success", "userVerified":true});
+              res.status(301).redirect(process.env.FRONTEND_URL);
             }
           } catch (err) {
             console.log(err);
             res
               .status(500)
-              .send({ status: "Error", Error: "user verification failed" });
+              .send({ status: "error", error: "user verification failed" });
           }
     },
 
@@ -91,12 +92,12 @@ const service = {
                 res.status(200).send({status:"Mail sent to reset password"});
             }
             else{
-                res.status(401).send({status:"Error", Error:"User doesn't exist"});
+                res.status(401).send({status:"error", error:"User doesn't exist"});
             }
         }
         catch(err){
             console.log(err);
-            res.status(500).send({status:"Error", Error:"Error resetting password"});
+            res.status(500).send({status:"error", error:"Error resetting password"});
         }  
     },
 
@@ -114,20 +115,20 @@ const service = {
                     res.status(200).send({status:"Password reset successful", data:resetPasswordData});
                 }
                 else{
-                    res.status(401).send({status:"Error", Error:"Wrong Email or Password"});
+                    res.status(401).send({status:"error", error:"Wrong Email or Password"});
                 }
         }
     }
         catch(err){
             console.log(err);
-            res.status(500).send({status:"Error", Error:"Error resetting password"});
+            res.status(500).send({status:"error", error:"Error resetting password"});
         }
     },
 
-    signOut(req,res){
-        res.cookie('jwt', '', { maxAge: 1 });
-        res.redirect('http://localhost:3000/');
-    }
+    // signOut(req,res){
+    //     res.cookie('jwt', '', { maxAge: 1 });
+    //     res.redirect('http://localhost:3000/');
+    // }
 }
 
 module.exports = service;

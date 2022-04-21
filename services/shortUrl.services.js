@@ -5,23 +5,23 @@ const service = {
     try {
       const data = await helper.checkForURL(req.body.fullURL);
       if (data) {
-        res.status(200).send({ status: "Short URL exists", shortURL: data });
+        res.status(200).send({ status: "Short URL exists", shortURL:`${process.env.DEPLOYED_URL}/${data.shortURL}`});
       } else {
         const data = await helper.createShortURL(req.body.fullURL);
         if (data) {
           const returnShortURl = await helper.checkForURL(req.body.fullURL);
-          res.status(200).send({ status: "Short URL Created", shortURL: `${process.env.DEPLOYED_URL}/${returnShortURl.shortURL}`});
+          res.status(200).send({ status: "Short URL Created", shortURL:`${process.env.DEPLOYED_URL}/${returnShortURl.shortURL}`});
         } else {
           res
             .status(501)
-            .send({ status: "Error", Error: "Error DB Creating Short URL" });
+            .send({ status: "error", error: "Error DB Creating Short URL" });
         }
       }
     } catch (err) {
       console.log(err);
       res
         .status(500)
-        .send({ status: "Error", Error: "Short URL Creating failed" });
+        .send({ status: "error", error: "Short URL Creating failed" });
     }
   },
 
@@ -43,7 +43,7 @@ const service = {
       console.log(err);
       res
         .status(500)
-        .send({ status: "Error", Error: "Short URL Handle failed" });
+        .send({ status: "error", error: "Short URL Handle failed" });
     }
   },
 

@@ -28,6 +28,6 @@ const userAuth = require('./routes/userAuth.routes');
 
     //PORT
     app.listen(process.env.PORT||3500, ()=>{
-        console.log(`Server running on ${process.env.PORT||3000}`);
+        console.log(`Server running on ${process.env.PORT||3500}`);
     });
 })();

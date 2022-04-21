@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {isEmail, isEmpty} from 'validator';
 
 function Signup() {
   const [user, setUser] = useState({
@@ -8,6 +9,7 @@ function Signup() {
   // States for checking the errors
 const [submitted, setSubmitted] = useState(false);
 const [error, setError] = useState(false);
+const [errorMsg, setErrorMsg] = useState("");
 
   function handleChange(event){
     const {name, value} = event.target;
@@ -23,76 +25,54 @@ const [error, setError] = useState(false);
 const handleSubmit = async(e) => {
   e.preventDefault();
   if (user.email === '' || user.password === '') {
+  //setErrorMsg("Email or Password can't be blank");
   setError(true);
   } else {
     try {
       const res = await fetch(process.env.REACT_APP_SIGNUP_LINK, {
         method: 'POST', 
-        body: JSON.stringify({ email:user.email, password:user.password }),
+        body: JSON.stringify({ email:user.email.toLowerCase(), password:user.password }),
         headers: {'Content-Type': 'application/json'}
       });
       const data = await res.json();
       console.log(data);
-      if (data.errors) {
-        setError=true;
+      if (data.status==="error") {
+        setErrorMsg(data.error);
+        setError(true);
+        setSubmitted(false);
+        console.error(data.error)
       }
-      if (data.user) {
+      if (data.status==="Signup Success") {
         console.log(data.user);
+        setError(false);
+        setErrorMsg('');
+        setSubmitted(true);
       }
 
     }
     catch (err) {
       console.log(err);
+      setErrorMsg(err);
+      setError(true);
+      setSubmitted(false);
     }
-  setSubmitted(true);
-  setError(false);
   }
   };
-  
-  // Showing success message
-  const successMessage = () => {
-  return (
-  <div
-  className="success"
-  style={{
-  display: submitted ? '' : 'none',
-  }}>
-  <h1>Successfully registered!!</h1>
-  </div>
-  );
-  };
-  
-  // Showing error message if error is true
-  const errorMessage = () => {
-  return (
-  <div
-  className="error"
-  style={{
-  display: error ? '' : 'none',
-  }}>
-  <h1>Please enter all the fields</h1>
-  </div>
-  );
-  };
-  
 
-  return (
+return (
     <div>
-    {/* Calling to the methods */}
-<div className="messages">
-{errorMessage()}
-{successMessage()}
-</div>
-
       <form>
         <h2>Sign up</h2>
         <label htmlFor="email">Email</label>
         <input type="text" name="email" onChange={handleChange} value={user.email} required />
-        <div className="email error"></div>
+        {!isEmail(user.email) && <div className="error">Please enter a valid email ID</div>}
+        
         <label htmlFor="password">Password</label>
         <input type="password" name="password" onChange={handleChange} value={user.password} required />
-        <div className="password error"></div>
+        {isEmpty(user.password) && <div className="error">Please enter a password</div>}
         <button onClick={handleSubmit}>Sign up</button>
+        {error && <div className="error">Error: {errorMsg}</div>}
+        {submitted && <div className="success">Successfully Registered. Check you mail for verification link(check in spam and promotion tab too)</div>}
       </form>
     </div>
   );
