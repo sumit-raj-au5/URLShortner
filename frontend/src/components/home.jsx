@@ -74,6 +74,8 @@ function Home() {
 
   //for toggling recent click view
   async function handleRecentClick() {
+    setInputURL('');
+    setShortURL('');
     setRecentClicked(!recentClicked);
   }
 
