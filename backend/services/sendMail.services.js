@@ -10,20 +10,20 @@ const service = {
             const transporter=nodemailer.createTransport({
                 service:"outlook",
                 auth:{
-                    user:"hirajsumit@outlook.com",
-                    pass:"sumittesting1234#"
+                    user:process.env.email,
+                    pass:process.env.password
                 }
             });
             const randomString = await getRandomString();
             let text;
             if(actionWords==="Reset Password"){
-                text = `${actionWords} with this link ${DEPLOYED_URL}/userauth/password-reset/${randomString}`;
+                text = `${actionWords} with this link ${process.env.DEPLOYED_URL}/userauth/password-reset/${randomString}`;
             }
             else if(actionWords==="Activate account"){
-                text = `${actionWords} with this link ${DEPLOYED_URL}/userauth/verification/${randomString}`
+                text = `${actionWords} with this link ${process.env.DEPLOYED_URL}/userauth/verification/${randomString}`
             }
             const options = {
-                from:"hirajsumit@outlook.com",
+                from:process.env.email,
                 to:toMail,
                 subject:`URL Shortner ${actionWords}`,
                 text:text
