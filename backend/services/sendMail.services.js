@@ -1,7 +1,9 @@
 const nodemailer = require('nodemailer');
 const {getRandomString} = require('../helpers/randomString.helpers');
 const helper = require('../helpers/userAuth.helpers');
+require('dotenv').config();
 
+const DEBUG = +process.env.DEBUG;
 const service = {
     async sendMailService(toMail, actionWords, res){
         try{
@@ -15,31 +17,31 @@ const service = {
             const randomString = await getRandomString();
             let text;
             if(actionWords==="Reset Password"){
-                text = `${actionWords} with this link http://localhost:3500/userauth/password-reset/${randomString}`;
+                text = `${actionWords} with this link ${DEPLOYED_URL}/userauth/password-reset/${randomString}`;
             }
             else if(actionWords==="Activate account"){
-                text = `${actionWords} with this link http://localhost:3500/userauth/verification/${randomString}`
+                text = `${actionWords} with this link ${DEPLOYED_URL}/userauth/verification/${randomString}`
             }
             const options = {
                 from:"hirajsumit@outlook.com",
                 to:toMail,
-                subject:`${actionWords} with NodeJs`,
+                subject:`URL Shortner ${actionWords}`,
                 text:text
             };
 
             transporter.sendMail(options, (err, info)=>{
                 if(err){
-                    console.log(err);
+                    if(DEBUG) console.log(err);
                     res.status(500).send({status:"Error", Error:"Error sending mail"});
                 }
                 const data = helper.storeRandomString(toMail, randomString);
-                console.log("sent" + info.response + "stored string" + data);
+                if(DEBUG) console.log("sent" + info.response + "stored string" + data);
                 res.status(200).send({status:"Mail sent"});
             });
 
         }
         catch(err){
-            console.log(err);
+            if(DEBUG) console.log(err);
             res.status(500).send({status:"Error", Error:"Error sending mail out"});
         }
     }

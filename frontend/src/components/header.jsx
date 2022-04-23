@@ -7,7 +7,7 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   //navigate hook is used to navigate from one page to another programatically
   const navigate = useNavigate();
-  //const DEBUG = false;
+  //const DEBUG = +process.env.REACT_APP_DEBUG;
   //useEfect will run on first page and and when there is any change in dependency list
   //here we are checking for user key in local storage and if user is logged in then it will be having user email value
   //useEffect will rerender the page on change of dependency list

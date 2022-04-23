@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const DEBUG = +process.env.DEBUG;
 const maxAge = 1*24*60*60;
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -16,7 +17,7 @@ const service = {
     async signin(req,res){
         try{
             const data = await helper.getUser(req.body.email);
-            console.log(data);
+            if(DEBUG) console.log(data);
             if(data){
                 const stored_password=data.password;
                 const entered_password=req.body.password;
@@ -35,7 +36,7 @@ const service = {
             }
         }
         catch(err){
-            console.log(err);
+            if(DEBUG) console.log(err);
             res.status(500).send({status:"error", error:"Error signing in"});
         }
     },
@@ -51,7 +52,7 @@ const service = {
             const data = await helper.createUser(req.body.email, entered_password);
             if(data){
                 const mailResponse = sendMailService(req.body.email, "Activate account");
-                console.log(`mail response ${mailResponse}`);
+                if(DEBUG) console.log(`mail response ${mailResponse}`);
                     res.status(200).send({status:"Signup Success"});  
             }
             else{
@@ -60,7 +61,7 @@ const service = {
         }
         }
         catch(err){
-            console.log(err);
+            if(DEBUG) console.log(err);
             res.status(500).send({status:"error", error:"Error signing up"});
         }
     },
@@ -69,14 +70,14 @@ const service = {
         try {
             
             const data = await helper.verifyUser(req.params.string);
-            console.log(data);
+            if(DEBUG) console.log(data);
             if (data.value == null) res.status(401).send({status:"error", error:"Verification failed due to wrong link"});
             else {
               //res.status(200).send({status:"Success", "userVerified":true});
-              res.status(301).redirect(process.env.FRONTEND_URL);
+              res.status(301).redirect(process.env.FRONTEND_SIGNIN_URL);
             }
           } catch (err) {
-            console.log(err);
+            if(DEBUG) console.log(err);
             res
               .status(500)
               .send({ status: "error", error: "user verification failed" });
@@ -88,7 +89,7 @@ const service = {
             const data = await helper.getUser(req.body.email);
             if(data && data.verified){
                const mailResponse = sendMailService(req.body.email, "Reset Password");
-                console.log(`mail response ${mailResponse}`);
+               if(DEBUG) console.log(`mail response ${mailResponse}`);
                 res.status(200).send({status:"Mail sent to reset password"});
             }
             else{
@@ -96,7 +97,7 @@ const service = {
             }
         }
         catch(err){
-            console.log(err);
+            if(DEBUG) console.log(err);
             res.status(500).send({status:"error", error:"Error resetting password"});
         }  
     },
@@ -120,7 +121,7 @@ const service = {
         }
     }
         catch(err){
-            console.log(err);
+            if(DEBUG) console.log(err);
             res.status(500).send({status:"error", error:"Error resetting password"});
         }
     },

@@ -14,7 +14,7 @@ function Signin() {
   //state to keep track of error and store error msg
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const DEBUG = false;
+  const DEBUG = process.env.REACT_APP_DEBUG;
   //for using useNavigate hook
   let navigate = useNavigate();
 

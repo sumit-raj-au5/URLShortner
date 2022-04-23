@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 //const User = require('../models/User');
 require('dotenv').config();
+const DEBUG = +process.env.DEBUG;
 
 const requireAuth = (req, res, next) => {
   const token = req.headers.jwt;
@@ -9,10 +10,10 @@ const requireAuth = (req, res, next) => {
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
       if (err) {
-        console.log(err.message);
+        if(DEBUG) console.log(err.message);
         res.redirect('/userauth/signin');
       } else {
-        console.log(decodedToken);
+        if(DEBUG) console.log(decodedToken);
         next();
       }
     });

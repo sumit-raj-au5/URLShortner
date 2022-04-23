@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-
+const DEBUG = +process.env.DEBUG;
 //importing Routes
 const shortURL = require('./routes/shortUrl.routes');
 const userAuth = require('./routes/userAuth.routes');
@@ -18,7 +18,7 @@ const userAuth = require('./routes/userAuth.routes');
     app.use(cookieParser());
     app.use(cors())
     app.use((req,res,next)=>{
-        console.log('Request Received');
+        if(DEBUG) console.log('Request Received');
         next();
     });
 
@@ -28,6 +28,6 @@ const userAuth = require('./routes/userAuth.routes');
 
     //PORT
     app.listen(process.env.PORT||3500, ()=>{
-        console.log(`Server running on ${process.env.PORT||3500}`);
+        if(DEBUG) console.log(`Server running on ${process.env.PORT||3500}`);
     });
 })();

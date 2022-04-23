@@ -1,6 +1,8 @@
 const db = require('../mongo');
 const {nanoid} = require('nanoid');
 const { ObjectId, Timestamp } = require("mongodb");
+require('dotenv').config();
+const DEBUG = +process.env.DEBUG;
 
 const helper = {
     checkForURL(fullURL){
@@ -9,7 +11,7 @@ const helper = {
 
     createShortURL(fullURL){
         const shortID = nanoid(8);
-        console.log(shortID);
+        if(DEBUG) console.log(shortID);
         var current_date=new Date();
         return db.urlData.insertOne({"fullURL":fullURL, "shortURL":shortID, "count":0, "timestamp":current_date});
     },

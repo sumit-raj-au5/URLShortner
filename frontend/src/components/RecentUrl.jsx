@@ -4,7 +4,7 @@ import { Col, Row, Table } from "react-bootstrap";
 
 function RecentUrl() {
   const [recentURL, setRecentURL] = useState([]);
-  const DEBUG = false;
+  const DEBUG = +process.env.REACT_APP_DEBUG;
 
   //Fetching Last 7 days URL from backend, useEffect will run only once when this component is loaded
   useEffect(() => {

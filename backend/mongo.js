@@ -1,5 +1,6 @@
 const {MongoClient} = require('mongodb');
 require('dotenv').config();
+const DEBUG = +process.env.DEBUG;
 
 const mongo = {
     //DB String
@@ -12,11 +13,11 @@ const mongo = {
         //database connection
         const client = new MongoClient(process.env.MONGODB_URL);
         await client.connect();
-        console.log(`MongoDB connected - ${process.env.MONGODB_URL}`);
+        if(DEBUG) {console.log(`MongoDB connected - ${process.env.MONGODB_URL}`)};
 
         //selecting Database
         this.db = client.db(process.env.MONGODB_DBNAME);
-        console.log(`Database selected - ${process.env.MONGODB_DBNAME}`);
+        if(DEBUG) {console.log(`Database selected - ${process.env.MONGODB_DBNAME}`)};
 
         //initializing collections
         this.urlData = this.db.collection("urlData");

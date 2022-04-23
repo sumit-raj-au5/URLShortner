@@ -12,7 +12,7 @@ function Signup() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const DEBUG = false;
+  const DEBUG = +process.env.REACT_APP_DEBUG;
 
   // storing user input in the relevant state variable
   //triggered on user input in form

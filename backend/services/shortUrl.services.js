@@ -1,5 +1,7 @@
 const helper = require("../helpers/shortUrl.helpers");
 require('dotenv').config();
+const DEBUG = +process.env.DEBUG;
+
 const service = {
   async createShortURL(req, res) {
     try {
@@ -18,7 +20,7 @@ const service = {
         }
       }
     } catch (err) {
-      console.log(err);
+      if(DEBUG) console.log(err);
       res
         .status(500)
         .send({ status: "error", error: "Short URL Creating failed" });
@@ -40,7 +42,7 @@ const service = {
         }
       }
     } catch (err) {
-      console.log(err);
+      if(DEBUG) console.log(err);
       res
         .status(500)
         .send({ status: "error", error: "Short URL Handle failed" });
@@ -49,7 +51,7 @@ const service = {
 
   async getURLCreatedInWeek(req,res){
     const data = await helper.getURLCreatedInWeek();
-    console.log(data);
+    if(DEBUG) console.log(data);
     res.status(200).send(data);
   },
 };

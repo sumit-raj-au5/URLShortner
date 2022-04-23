@@ -17,7 +17,7 @@ function Home() {
   const [recentClicked, setRecentClicked] = useState(false);
   const [fullURL, setFullURL] = useState("");
   const [shortURL, setShortURL] = useState("");
-  const DEBUG = false;
+  const DEBUG = +process.env.REACT_APP_DEBUG;
   // to use navigate hook
   let navigate = useNavigate();
 
